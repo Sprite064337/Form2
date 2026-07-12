@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ระบบสั่งซื้อสินค้าออนไลน์</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Kanit', sans-serif;
+        }
+
+        body {
+            background-color: #f3f4f6;
+            color: #333;
+            padding: 20px 10px;
+        }
+
+        .order-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+
+        .order-header {
+            background: linear-gradient(135deg, #1a237e, #ef6c00);
+            color: white;
+            text-align: center;
+            padding: 30px 20px;
+        }
+
+        .order-header h1 {
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .form-zone {
+            padding: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 15px;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: #4b5563;
+        }
+
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 15px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+            border-color: #ef6c00;
+        }
+
+        .submit-btn {
+            width: 100%;
+            background-color: #06c755;
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 30px;
+            font-size: 18px;
+            font-weight: 500;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(6, 199, 85, 0.3);
+            margin-top: 10px;
+        }
+
+        .submit-btn:hover {
+            background-color: #05b34c;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            font-size: 12px;
+            color: #9ca3af;
+            background: #fafafa;
+            border-top: 1px solid #f3f4f6;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="order-container">
+        
+        <header class="order-header">
+            <h1>🛒 กรอกข้อมูลเพื่อสั่งซื้อสินค้า</h1>
+            <p>กรุณาโอนเงินมาที่ ธ.กสิกรไทย เลขบัญชี: 000-0-00000-0</p>
+        </header>
+
+        <div class="form-zone">
+            <!-- ฟอร์มกรอกข้อมูล -->
+            <div class="form-group">
+                <label for="product">เลือกรายการสินค้า</label>
+                <select id="product">
+                    <option value="สินค้าชุดที่ 1">สินค้าชุดที่ 1 - ราคา 199 บาท</option>
+                    <option value="สินค้าชุดที่ 2">สินค้าชุดที่ 2 - ราคา 399 บาท</option>
+                    <option value="สินค้าชุดที่ 3">สินค้าชุดที่ 3 - ราคา 599 บาท</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="name">ชื่อ-นามสกุล ผู้รับ *</label>
+                <input type="text" id="name" placeholder="ชื่อ และ นามสกุล" required>
+            </div>
+
+            <div class="form-group">
+                <label for="phone">เบอร์โทรศัพท์ *</label>
+                <input type="tel" id="phone" placeholder="ตัวอย่าง 0812345678" required>
+            </div>
+
+            <div class="form-group">
+                <label for="address">ที่อยู่จัดส่งอย่างละเอียด *</label>
+                <textarea id="address" rows="4" placeholder="บ้านเลขที่ หมู่ ซอย ถนน ตำบล อำเภอ จังหวัด รหัสไปรษณีย์" required></textarea>
+            </div>
+
+            <button type="button" class="submit-btn" onclick="sendToLine()">ส่งข้อมูลสั่งซื้อเข้าไลน์ร้าน</button>
+        </div>
+
+        <footer class="footer">
+            <p>© 2026 ระบบสั่งซื้อสินค้า ปลอดภัย 100%</p>
+        </footer>
+
+    </div>
+
+    <script>
+        function sendToLine() {
+            // ดึงค่าจากฟอร์ม
+            const product = document.getElementById('product').value;
+            const name = document.getElementById('name').value;
+            const phone = document.getElementById('phone').value;
+            const address = document.getElementById('address').value;
+
+            // ตรวจสอบว่ากรอกข้อมูลครบไหม
+            if (!name || !phone || !address) {
+                alert('กรุณากรอกข้อมูลให้ครบถ้วนก่อนส่งนะครับ');
+                return;
+            }
+
+            // จัดรูปแบบข้อความที่จะส่งเข้าไลน์
+            const text = `สนใจสั่งซื้อสินค้าครับ\n\n📦 สินค้า: ${product}\n👤 ชื่อผู้รับ: ${name}\n📞 เบอร์โทร: ${phone}\n🏠 ที่อยู่จัดส่ง: ${address}\n\n(แจ้งโอนเงินเรียบร้อยแล้ว)`;
+            
+            // แปลงข้อความให้เป็นรูปแบบ URL
+            const encodedText = encodeURIComponent(text);
+            
+            // ⚠️ เปลี่ยนไอดีไลน์ตรงคำว่า @yourlineid เป็นไอดี LINE OA ของคุณจริงๆ นะครับ
+            const lineOALink = `https://line.me/R/oaMessage/@yourlineid/?${encodedText}`;
+            
+            // เปิดหน้าแชทไลน์พร้อมส่งข้อความให้ทันที
+            window.open(lineOALink, '_blank');
+        }
+    </script>
+
+</body>
+</html>
