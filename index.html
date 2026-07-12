@@ -44,6 +44,11 @@
             margin-bottom: 8px;
         }
 
+        .order-header p {
+            font-size: 15px;
+            opacity: 0.9;
+        }
+
         .form-zone {
             padding: 25px;
         }
@@ -86,6 +91,7 @@
             cursor: pointer;
             box-shadow: 0 4px 10px rgba(6, 199, 85, 0.3);
             margin-top: 10px;
+            transition: background-color 0.2s;
         }
 
         .submit-btn:hover {
@@ -109,16 +115,17 @@
         <header class="order-header">
             <h1>🛒 กรอกข้อมูลเพื่อสั่งซื้อสินค้า</h1>
             <p>กรุณาโอนเงินมาที่ ธ.กสิกรไทย เลขบัญชี: 000-0-00000-0</p>
+            <p style="margin-top: 5px; color: #ffeb3b; font-weight: 500;">โอนเงินเรียบร้อยแล้ว กรอกข้อมูลด้านล่างได้เลยครับ</p>
         </header>
 
         <div class="form-zone">
             <!-- ฟอร์มกรอกข้อมูล -->
             <div class="form-group">
-                <label for="product">เลือกรายการสินค้า</label>
+                <label for="product">เลือกรายการสินค้า / จำนวน</label>
                 <select id="product">
-                    <option value="สินค้าชุดที่ 1">สินค้าชุดที่ 1 - ราคา 199 บาท</option>
-                    <option value="สินค้าชุดที่ 2">สินค้าชุดที่ 2 - ราคา 399 บาท</option>
-                    <option value="สินค้าชุดที่ 3">สินค้าชุดที่ 3 - ราคา 599 บาท</option>
+                    <option value="test">test</option>
+                    <option value="test2">test2</option>
+                    <option value="test3">test3</option>
                 </select>
             </div>
 
@@ -154,23 +161,28 @@
             const phone = document.getElementById('phone').value;
             const address = document.getElementById('address').value;
 
-            // ตรวจสอบว่ากรอกข้อมูลครบไหม
+            // ตรวจสอบข้อมูล
             if (!name || !phone || !address) {
                 alert('กรุณากรอกข้อมูลให้ครบถ้วนก่อนส่งนะครับ');
                 return;
             }
 
-            // จัดรูปแบบข้อความที่จะส่งเข้าไลน์
+            // จัดข้อความสำหรับส่ง
             const text = `สนใจสั่งซื้อสินค้าครับ\n\n📦 สินค้า: ${product}\n👤 ชื่อผู้รับ: ${name}\n📞 เบอร์โทร: ${phone}\n🏠 ที่อยู่จัดส่ง: ${address}\n\n(แจ้งโอนเงินเรียบร้อยแล้ว)`;
             
-            // แปลงข้อความให้เป็นรูปแบบ URL
-            const encodedText = encodeURIComponent(text);
-            
-            // ⚠️ เปลี่ยนไอดีไลน์ตรงคำว่า @yourlineid เป็นไอดี LINE OA ของคุณจริงๆ นะครับ
-            const lineOALink = `https://line.me/R/oaMessage/@364jrrez/?${encodedText}`;
-            
-            // เปิดหน้าแชทไลน์พร้อมส่งข้อความให้ทันที
-            window.open(lineOALink, '_blank');
+            // ใช้ระบบคัดลอกลงคลิปบอร์ดอัตโนมัติ
+            navigator.clipboard.writeText(text).then(function() {
+                alert('คัดลอกข้อมูลออเดอร์เรียบร้อยแล้ว! ระบบจะเปิดแชทไลน์ ให้คุณกด "วาง" (Paste) ในช่องแชทเพื่อส่งออเดอร์และสลิปได้เลยครับ');
+                
+                // ลิงก์ร้านค้าของคุณอย่างเป็นทางการ
+                const lineOALink = `https://lin.ee/wMpfwPK`;
+                
+                window.open(lineOALink, '_blank');
+            }).catch(function(err) {
+                // เผื่อเบราว์เซอร์บางตัวติดสิทธิ์ความปลอดภัย
+                alert('ไม่สามารถคัดลอกอัตโนมัติได้ กรุณาแคปหน้าจอที่มีข้อมูลนี้ส่งทางแชทแทนนะครับ');
+                window.open(`https://lin.ee/wMpfwPK`, '_blank');
+            });
         }
     </script>
 
