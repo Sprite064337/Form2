@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ระบบสั่งซื้อสินค้าออนไลน์</title>
+    <title>ระบบสั่งซื้อสินค้าออนไลน์ - Papaporn Farm</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -119,13 +119,29 @@
         </header>
 
         <div class="form-zone">
-            <!-- ฟอร์มกรอกข้อมูล -->
+            <!-- ส่วนเลือกไข่ขนาดเล็ก -->
             <div class="form-group">
-                <label for="product">เลือกรายการสินค้า / จำนวน</label>
-                <select id="product">
-                    <option value="test">test</option>
-                    <option value="test2">test2</option>
-                    <option value="test3">test3</option>
+                <label for="egg_small">🥚 ไข่ขนาดเล็ก (เลือกจำนวนแผง)</label>
+                <select id="egg_small">
+                    <option value="ไม่รับ">-- ไม่รับไข่ขนาดเล็ก --</option>
+                    <option value="1 แผง (90 บาท)">1 แผง - ราคา 90 บาท</option>
+                    <option value="2 แผง (180 บาท)">2 แผง - ราคา 180 บาท</option>
+                    <option value="3 แผง (270 บาท)">3 แผง - ราคา 270 บาท</option>
+                    <option value="4 แผง (360 บาท)">4 แผง - ราคา 360 บาท</option>
+                    <option value="5 แผง (450 บาท บริการส่งฟรี)">5 แผง - ราคา 450 บาท (บริการส่งฟรี)</option>
+                </select>
+            </div>
+
+            <!-- ส่วนเลือกไข่ขนาดใหญ่ -->
+            <div class="form-group">
+                <label for="egg_large">🥚 ไข่ขนาดใหญ่ (เลือกจำนวนแผง)</label>
+                <select id="egg_large">
+                    <option value="ไม่รับ">-- ไม่รับไข่ขนาดใหญ่ --</option>
+                    <option value="1 แผง (90 บาท)">1 แผง - ราคา 90 บาท</option>
+                    <option value="2 แผง (180 บาท)">2 แผง - ราคา 180 บาท</option>
+                    <option value="3 แผง (270 บาท)">3 แผง - ราคา 270 บาท</option>
+                    <option value="4 แผง (360 บาท)">4 แผง - ราคา 360 บาท</option>
+                    <option value="5 แผง (450 บาท บริการส่งฟรี)">5 แผง - ราคา 450 บาท (บริการส่งฟรี)</option>
                 </select>
             </div>
 
@@ -155,32 +171,41 @@
 
     <script>
         function sendToLine() {
-            // ดึงค่าจากฟอร์ม
-            const product = document.getElementById('product').value;
+            // ดึงค่าจากช่องฟอร์มทั้งหมด
+            const eggSmall = document.getElementById('egg_small').value;
+            const eggLarge = document.getElementById('egg_large').value;
             const name = document.getElementById('name').value;
             const phone = document.getElementById('phone').value;
             const address = document.getElementById('address').value;
 
-            // ตรวจสอบข้อมูล
+            // ตรวจสอบข้อมูลส่วนบุคคล
             if (!name || !phone || !address) {
-                alert('กรุณากรอกข้อมูลให้ครบถ้วนก่อนส่งนะครับ');
+                alert('กรุณากรอกข้อมูลผู้รับและที่อยู่ให้ครบถ้วนก่อนส่งนะครับ');
                 return;
             }
 
-            // จัดข้อความสำหรับส่ง
-            const text = `สนใจสั่งซื้อสินค้าครับ\n\n📦 สินค้า: ${product}\n👤 ชื่อผู้รับ: ${name}\n📞 เบอร์โทร: ${phone}\n🏠 ที่อยู่จัดส่ง: ${address}\n\n(แจ้งโอนเงินเรียบร้อยแล้ว)`;
+            // ตรวจสอบว่าลูกค้าเลือกสินค้าอย่างน้อยหนึ่งอย่างหรือไม่
+            if (eggSmall === "ไม่รับ" && eggLarge === "ไม่รับ") {
+                alert('กรุณาเลือกรายการไข่อย่างน้อย 1 รายการก่อนส่งสั่งซื้อนะครับ');
+                return;
+            }
+
+            // จัดรูปแบบข้อความรายการสินค้า
+            let productSummary = "";
+            if (eggSmall !== "ไม่รับ") productSummary += `\n   - ไข่ขนาดเล็ก: ${eggSmall}`;
+            if (eggLarge !== "ไม่รับ") productSummary += `\n   - ไข่ขนาดใหญ่: ${eggLarge}`;
+
+            // จัดข้อความเต็มชุดเพื่อรอคัดลอก
+            const text = `สนใจสั่งซื้อสินค้าจาก Papaporn Farm ครับ\n\n📦 รายการสินค้าที่สั่ง:${productSummary}\n\n👤 ชื่อผู้รับ: ${name}\n📞 เบอร์โทร: ${phone}\n🏠 ที่อยู่จัดส่ง: ${address}\n\n(แจ้งโอนเงินเรียบร้อยแล้ว)`;
             
             // ใช้ระบบคัดลอกลงคลิปบอร์ดอัตโนมัติ
             navigator.clipboard.writeText(text).then(function() {
                 alert('คัดลอกข้อมูลออเดอร์เรียบร้อยแล้ว! ระบบจะเปิดแชทไลน์ ให้คุณกด "วาง" (Paste) ในช่องแชทเพื่อส่งออเดอร์และสลิปได้เลยครับ');
                 
-                // ลิงก์ร้านค้าของคุณอย่างเป็นทางการ
                 const lineOALink = `https://lin.ee/wMpfwPK`;
-                
                 window.open(lineOALink, '_blank');
             }).catch(function(err) {
-                // เผื่อเบราว์เซอร์บางตัวติดสิทธิ์ความปลอดภัย
-                alert('ไม่สามารถคัดลอกอัตโนมัติได้ กรุณาแคปหน้าจอที่มีข้อมูลนี้ส่งทางแชทแทนนะครับ');
+                alert('ไม่สามารถคัดลอกอัตโนมัติได้ แต่คุณยังสามารถกดแชทเพื่อสั่งซื้อได้ครับ (กรุณาแคปหน้าจอนี้ส่งทางแชท)');
                 window.open(`https://lin.ee/wMpfwPK`, '_blank');
             });
         }
